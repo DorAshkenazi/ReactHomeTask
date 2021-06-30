@@ -19,7 +19,9 @@ import {
   Badge,
   MenuItem,
   Select,
+  Snackbar,
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
@@ -62,6 +64,9 @@ export const ProductPage: React.FC = () => {
 
     getCategoryList()
       .then((res) => {
+        res = res.map((category: string) => {
+          return category.charAt(0).toUpperCase() + category.slice(1);
+        });
         setAvailableCategories(res);
       })
       .catch((error) => {
@@ -78,6 +83,8 @@ export const ProductPage: React.FC = () => {
     history.push("/cart");
   };
 
+  const [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
+
   // Table States & Functions
   const [rows, setRows] = useState<Array<Product>>([]);
   const [rowsPerPage] = useState<number>(5);
@@ -92,6 +99,7 @@ export const ProductPage: React.FC = () => {
 
   const addToCart = (product: Product) => {
     dispatch(addProductToCart(product));
+    setOpenSnackBar(true);
   };
 
   const sortProducts = (orderByProperty: string) => {
@@ -188,7 +196,7 @@ export const ProductPage: React.FC = () => {
               <TableCell>
                 Title
                 <TableSortLabel
-                  active={orderBy === "Title"}
+                  active={true}
                   direction={orderBy === "Title" ? order : "asc"}
                   onClick={() => sortProducts("Title")}
                 ></TableSortLabel>
@@ -196,7 +204,7 @@ export const ProductPage: React.FC = () => {
               <TableCell align="center">
                 Price
                 <TableSortLabel
-                  active={orderBy === "Price"}
+                  active={true}
                   direction={orderBy === "Price" ? order : "asc"}
                   onClick={() => sortProducts("Price")}
                 ></TableSortLabel>
@@ -236,6 +244,15 @@ export const ProductPage: React.FC = () => {
                     <IconButton onClick={() => addToCart(product)}>
                       <AddShoppingCartIcon />
                     </IconButton>
+                    <Snackbar
+                      open={openSnackBar}
+                      autoHideDuration={1500}
+                      onClose={() => setOpenSnackBar(false)}
+                    >
+                      <Alert variant="filled" severity="success">
+                        Product added to cart
+                      </Alert>
+                    </Snackbar>
                   </TableCell>
                 </TableRow>
               ))}
