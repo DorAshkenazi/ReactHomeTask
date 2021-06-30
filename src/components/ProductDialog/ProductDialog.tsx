@@ -43,26 +43,20 @@ export const ProductDialog: React.FC<ProductDialogProps> = (
   const history = useHistory();
 
   useEffect(() => {
-    let isMounted = true;
     getProductById(props.productId)
       .then((res: Product) => {
-        if (isMounted) {
-          if (res) {
-            setProduct(res);
-            setIsLoaded(true);
-          } else {
-            alert("Product does not exist");
-            props.onClose();
-            history.push("/");
-          }
+        if (res) {
+          setProduct(res);
+          setIsLoaded(true);
+        } else {
+          alert("Product does not exist");
+          props.onClose();
+          history.push("/");
         }
       })
       .catch((error) => {
         console.log(error);
       });
-    return () => {
-      isMounted = false;
-    };
   }, [history, props, props.productId]);
 
   const [product, setProduct] = useState<Product | null>();

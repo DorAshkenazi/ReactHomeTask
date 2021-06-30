@@ -21,7 +21,7 @@ const getCategoryProducts = async (
   let url = fakeStoreApiUrl + "products/";
 
   if (category !== "All Categories") {
-    url += `category/${category}`;
+    url += `category/${category.toLowerCase()}`;
   }
 
   const response = await fetch(url);

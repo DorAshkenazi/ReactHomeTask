@@ -25,7 +25,9 @@ import {
   DialogContentText,
   IconButton,
   Typography,
+  Snackbar,
 } from "@material-ui/core/";
+import Alert from "@material-ui/lab/Alert";
 import UndoIcon from "@material-ui/icons/Undo";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 
@@ -43,6 +45,8 @@ export const CartPage: React.FC = () => {
     history.push("/");
   };
 
+  const [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
+
   // Table States & Functions
   const [rowsPerPage] = useState<number>(5);
   const [page, setPage] = useState<number>(0);
@@ -53,6 +57,7 @@ export const CartPage: React.FC = () => {
 
   const removeFromCart = (product: Product) => {
     dispatch(removeProductFromCart(product));
+    setOpenSnackBar(true);
   };
 
   // Dialog States & Functions
@@ -101,8 +106,8 @@ export const CartPage: React.FC = () => {
         <UndoIcon />
       </IconButton>
       <Toolbar style={{ justifyContent: "center" }}>
-          <Typography variant="h6">Shopping Cart</Typography>
-        </Toolbar>
+        <Typography variant="h6">Shopping Cart</Typography>
+      </Toolbar>
       <TableContainer className={classes.tableContainer} component={Paper}>
         <Table className={classes.table}>
           <TableHead>
@@ -187,6 +192,15 @@ export const CartPage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={1500}
+        onClose={() => setOpenSnackBar(false)}
+      >
+        <Alert variant="filled" severity="success">
+          Product removed from cart
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
