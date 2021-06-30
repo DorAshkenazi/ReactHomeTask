@@ -10,7 +10,12 @@ import ProductPage from "./components/ProductPage/ProductPage";
 import CartPage from "./components/CartPage/CartPage";
 
 // Router
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -19,6 +24,8 @@ ReactDOM.render(
         <Route exact path="/" component={ProductPage}></Route>
         <Route path="/cart" component={CartPage}></Route>
         <Route path="/products/:product_id" component={ProductPage}></Route>
+
+        <Redirect to="/" />
       </Switch>
     </Router>
   </Provider>,

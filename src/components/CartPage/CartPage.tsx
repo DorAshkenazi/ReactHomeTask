@@ -100,10 +100,10 @@ export const CartPage: React.FC = () => {
       >
         <UndoIcon />
       </IconButton>
-      <TableContainer className={classes.tableContainer} component={Paper}>
-        <Toolbar style={{ justifyContent: "center" }}>
+      <Toolbar style={{ justifyContent: "center" }}>
           <Typography variant="h6">Shopping Cart</Typography>
         </Toolbar>
+      <TableContainer className={classes.tableContainer} component={Paper}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>

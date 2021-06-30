@@ -7,6 +7,7 @@ const useStyles = makeStyles({
   tableContainer: {
     margin: "auto",
     position: "relative",
+    overflow: "auto"
   },
   titleTableCell: {
     width: "450px",
