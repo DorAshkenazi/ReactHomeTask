@@ -163,7 +163,7 @@ export const CartPage: React.FC = () => {
       <Dialog open={checkOutAgreementOpen} onClose={handleAgreeToCheckOutClose}>
         <DialogTitle>Are you sure you want to check out?</DialogTitle>
         <DialogContentText className={classes.checkOutDialogText}>
-          Current price of products cart:
+          Current price of products in cart:
           <strong> ${sumPriceOfProductsInCart}</strong>
         </DialogContentText>
         <DialogActions>
@@ -197,7 +197,7 @@ export const CartPage: React.FC = () => {
         autoHideDuration={1500}
         onClose={() => setOpenSnackBar(false)}
       >
-        <Alert variant="filled" severity="success">
+        <Alert variant="filled" severity="warning">
           Product removed from cart
         </Alert>
       </Snackbar>

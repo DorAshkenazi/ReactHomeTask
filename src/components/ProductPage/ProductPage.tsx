@@ -20,6 +20,7 @@ import {
   MenuItem,
   Select,
   Snackbar,
+  CircularProgress,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -57,6 +58,7 @@ export const ProductPage: React.FC = () => {
     getProductList()
       .then((res) => {
         setRows(res);
+        setIsLoaded(true);
       })
       .catch((error) => {
         console.log(error);
@@ -92,6 +94,7 @@ export const ProductPage: React.FC = () => {
   const [orderBy, setOrderBy] = useState("Title");
   type Order = "asc" | "desc";
   const [order, setOrder] = useState<Order>("asc");
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -146,10 +149,12 @@ export const ProductPage: React.FC = () => {
 
   const handleSelectCategory = (category: string) => {
     setCurrentCategory(category);
+    setIsLoaded(false);
     getCategoryProducts(category)
       .then((res: Array<Product>) => {
         setRows(res);
         setPage(0);
+        setIsLoaded(true);
       })
       .catch((error) => {
         console.log(error);
@@ -189,84 +194,97 @@ export const ProductPage: React.FC = () => {
           ))}
         </Select>
       </Toolbar>
-      <TableContainer style={{}} component={Paper}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                Title
-                <TableSortLabel
-                  active={true}
-                  direction={orderBy === "Title" ? order : "asc"}
-                  onClick={() => sortProducts("Title")}
-                ></TableSortLabel>
-              </TableCell>
-              <TableCell align="center">
-                Price
-                <TableSortLabel
-                  active={true}
-                  direction={orderBy === "Price" ? order : "asc"}
-                  onClick={() => sortProducts("Price")}
-                ></TableSortLabel>
-              </TableCell>
-              <TableCell align="center">Product Image</TableCell>
-              <TableCell align="center">Add To Cart</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((product: Product) => (
-                <TableRow
-                  onClick={() => handleOpenDialog(product)}
-                  key={product.id}
-                  hover={true}
-                >
-                  <TableCell className={classes.titleTableCell}>
-                    {product.title}
+      {isLoaded && (
+        <>
+          <TableContainer style={{}} component={Paper}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    Title
+                    <TableSortLabel
+                      active={true}
+                      direction={orderBy === "Title" ? order : "asc"}
+                      onClick={() => sortProducts("Title")}
+                    ></TableSortLabel>
                   </TableCell>
-                  <TableCell align="center">${product.price}</TableCell>
-                  <TableCell
-                    style={{ display: "flex", justifyContent: "center" }}
-                  >
-                    <img
-                      className={classes.productImage}
-                      src={product.image}
-                      alt="sourceImage"
-                    />
+                  <TableCell align="center">
+                    Price
+                    <TableSortLabel
+                      active={true}
+                      direction={orderBy === "Price" ? order : "asc"}
+                      onClick={() => sortProducts("Price")}
+                    ></TableSortLabel>
                   </TableCell>
-                  <TableCell
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    align="center"
-                  >
-                    <IconButton onClick={() => addToCart(product)}>
-                      <AddShoppingCartIcon />
-                    </IconButton>
-                    <Snackbar
-                      open={openSnackBar}
-                      autoHideDuration={1500}
-                      onClose={() => setOpenSnackBar(false)}
-                    >
-                      <Alert variant="filled" severity="success">
-                        Product added to cart
-                      </Alert>
-                    </Snackbar>
-                  </TableCell>
+                  <TableCell align="center">Product Image</TableCell>
+                  <TableCell align="center">Add To Cart</TableCell>
                 </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-      />
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((product: Product) => (
+                    <TableRow
+                      onClick={() => handleOpenDialog(product)}
+                      key={product.id}
+                      hover={true}
+                    >
+                      <TableCell className={classes.titleTableCell}>
+                        {product.title}
+                      </TableCell>
+                      <TableCell align="center">${product.price}</TableCell>
+                      <TableCell
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <img
+                          className={classes.productImage}
+                          src={product.image}
+                          alt="sourceImage"
+                        />
+                      </TableCell>
+                      <TableCell
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        align="center"
+                      >
+                        <IconButton onClick={() => addToCart(product)}>
+                          <AddShoppingCartIcon />
+                        </IconButton>
+                        <Snackbar
+                          open={openSnackBar}
+                          autoHideDuration={1500}
+                          onClose={() => setOpenSnackBar(false)}
+                        >
+                          <Alert variant="filled" severity="success">
+                            Product added to cart
+                          </Alert>
+                        </Snackbar>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+          />
+        </>
+      )}
+      {isLoaded || (
+        <CircularProgress
+          style={{
+            position: "absolute",
+            top: "43%",
+            left: "46%",
+          }}
+        />
+      )}
     </>
   );
 };
