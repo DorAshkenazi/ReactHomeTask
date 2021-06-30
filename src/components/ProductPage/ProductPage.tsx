@@ -158,7 +158,7 @@ export const ProductPage: React.FC = () => {
         ></ProductDialog>
       )}
       <IconButton
-        style={{ float: "right" }}
+        style={{ float: "right", margin: "10px" }}
         onClick={() => handleMoveToCartPage()}
       >
         <Badge badgeContent={itemsInCart.length} color="secondary">
