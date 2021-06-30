@@ -181,70 +181,67 @@ export const ProductPage: React.FC = () => {
           ))}
         </Select>
       </Toolbar>
-
-      <div style={{ overflow: "auto" }}>
-        <TableContainer style={{}} component={Paper}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  Title
-                  <TableSortLabel
-                    active={orderBy === "Title"}
-                    direction={orderBy === "Title" ? order : "asc"}
-                    onClick={() => sortProducts("Title")}
-                  ></TableSortLabel>
-                </TableCell>
-                <TableCell align="center">
-                  Price
-                  <TableSortLabel
-                    active={orderBy === "Price"}
-                    direction={orderBy === "Price" ? order : "asc"}
-                    onClick={() => sortProducts("Price")}
-                  ></TableSortLabel>
-                </TableCell>
-                <TableCell align="center">Product Image</TableCell>
-                <TableCell align="center">Add To Cart</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((product: Product) => (
-                  <TableRow
-                    onClick={() => handleOpenDialog(product)}
-                    key={product.id}
-                    hover={true}
+      <TableContainer style={{}} component={Paper}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                Title
+                <TableSortLabel
+                  active={orderBy === "Title"}
+                  direction={orderBy === "Title" ? order : "asc"}
+                  onClick={() => sortProducts("Title")}
+                ></TableSortLabel>
+              </TableCell>
+              <TableCell align="center">
+                Price
+                <TableSortLabel
+                  active={orderBy === "Price"}
+                  direction={orderBy === "Price" ? order : "asc"}
+                  onClick={() => sortProducts("Price")}
+                ></TableSortLabel>
+              </TableCell>
+              <TableCell align="center">Product Image</TableCell>
+              <TableCell align="center">Add To Cart</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((product: Product) => (
+                <TableRow
+                  onClick={() => handleOpenDialog(product)}
+                  key={product.id}
+                  hover={true}
+                >
+                  <TableCell className={classes.titleTableCell}>
+                    {product.title}
+                  </TableCell>
+                  <TableCell align="center">${product.price}</TableCell>
+                  <TableCell
+                    style={{ display: "flex", justifyContent: "center" }}
                   >
-                    <TableCell className={classes.titleTableCell}>
-                      {product.title}
-                    </TableCell>
-                    <TableCell align="center">${product.price}</TableCell>
-                    <TableCell
-                      style={{ display: "flex", justifyContent: "center" }}
-                    >
-                      <img
-                        className={classes.productImage}
-                        src={product.image}
-                        alt="sourceImage"
-                      />
-                    </TableCell>
-                    <TableCell
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                      align="center"
-                    >
-                      <IconButton onClick={() => addToCart(product)}>
-                        <AddShoppingCartIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
+                    <img
+                      className={classes.productImage}
+                      src={product.image}
+                      alt="sourceImage"
+                    />
+                  </TableCell>
+                  <TableCell
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    align="center"
+                  >
+                    <IconButton onClick={() => addToCart(product)}>
+                      <AddShoppingCartIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <TablePagination
         rowsPerPageOptions={[5]}
         component="div"
